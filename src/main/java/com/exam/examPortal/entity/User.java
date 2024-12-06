@@ -1,6 +1,10 @@
 package com.exam.examPortal.entity;
 
 import jakarta.persistence.*;
+import jakarta.transaction.UserTransaction;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -22,7 +26,18 @@ public class User {
 
     private String phone;
 
+    public Set<userRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<userRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
     private boolean enable;
+
+    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    private Set<userRole> userRoles = new HashSet<>();
    public User(){
 
    }
@@ -102,5 +117,18 @@ public class User {
     }
 
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "Id=" + Id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", enable=" + enable +
+                ", userRoles=" + userRoles +
+                '}';
+    }
 }
