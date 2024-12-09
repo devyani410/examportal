@@ -8,6 +8,8 @@ import com.exam.examPortal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -38,4 +40,26 @@ public class UserServiceImpl implements UserService {
         }
         return local;
     }
+
+    @Override
+    public List<User> getUSers(){
+      return  this.userRepository.findAll();
+    }
+
+    @Override
+    public Optional<User> getByID(Long Id) {
+        return this.userRepository.findById(Id);
+    }
+
+    @Override
+    public User getByUserName(String userName) {
+        return this.userRepository.findByuserName(userName);
+    }
+
+    @Override
+    public void deleteByID(Long id) {
+         this.userRepository.deleteById(id);
+    }
+
+
 }
