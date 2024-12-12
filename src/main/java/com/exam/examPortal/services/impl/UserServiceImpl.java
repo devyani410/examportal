@@ -57,6 +57,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User loginUser(String userName, String password) {
+        return this.userRepository.findByuserNameAndPassword(userName, password);
+    }
+
+    @Override
     public void deleteByID(Long id) {
          this.userRepository.deleteById(id);
     }

@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", methods = {RequestMethod.POST, RequestMethod.OPTIONS})
 public class userController {
 
     @Autowired
@@ -30,7 +31,7 @@ public class userController {
         return new ResponseEntity(users, HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public ResponseEntity<?> addUser(@RequestBody User user){
         try {
 
@@ -47,6 +48,21 @@ public class userController {
             Optional<User> currUser = this.userService.getByID(id);
             if(currUser.isPresent()){
                 return new ResponseEntity<>(currUser.get(), HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/login/{userName}/{password}")
+    public ResponseEntity<?> loginUser(@PathVariable("userName") String userName, @PathVariable("password") String password){
+        try{
+            User currUser = this.userService.loginUser(userName, password);
+            if(currUser!=null){
+                return new ResponseEntity<>(currUser, HttpStatus.OK);
             }else{
                 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
             }

@@ -14,6 +14,6 @@ public interface UserService {
      public List<User> getUSers();
      public Optional<User> getByID(Long Id);
      public User getByUserName(String userName);
-
+     public User loginUser(String userName, String password);
      public void deleteByID(Long id);
 }
