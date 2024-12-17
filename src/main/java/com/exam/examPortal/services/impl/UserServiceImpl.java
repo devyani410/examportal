@@ -28,7 +28,10 @@ public class UserServiceImpl implements UserService {
         if(local!=null){
             System.out.println("User already exist");
             throw new Exception("User Already Present");
+        }else if(this.userRepository.findByemailOrPhone(user.getEmail(),user.getPassword())!=null){
+            throw new Exception("Email Or Phone Already Registered");
         }else{
+
 
             // create User
             for(userRole userRole1:userRoles ){

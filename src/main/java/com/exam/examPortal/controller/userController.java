@@ -2,14 +2,10 @@ package com.exam.examPortal.controller;
 
 import com.exam.examPortal.entity.User;
 import com.exam.examPortal.services.UserService;
-import jdk.jfr.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -34,11 +30,16 @@ public class userController {
     @PostMapping("/register")
     public ResponseEntity<?> addUser(@RequestBody User user){
         try {
-
             User createdUSer = userService.createUser(user, new HashSet<>());
             return new ResponseEntity(createdUSer, HttpStatus.OK);
         }catch (Exception e){
-             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            if(e.getMessage().equals("Email Or Phone Already Registered")){
+                return new ResponseEntity<>( "Email Or Phone Already Registered" ,HttpStatus.OK);
+            }else if(e.getMessage().equals("User Already Present")){
+                return new ResponseEntity<>("User Already Present", HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -51,7 +52,6 @@ public class userController {
             }else{
                 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
             }
-
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -66,7 +66,6 @@ public class userController {
             }else{
                 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
             }
-
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -74,8 +73,6 @@ public class userController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> DeleteByID(@PathVariable("id") long id){
-
-
         try{
             if(userService.getByID(id)==null){
                 userService.deleteByID(id);
