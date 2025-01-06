@@ -2,13 +2,16 @@ package com.exam.examPortal.entity;
 
 import jakarta.persistence.*;
 import jakarta.transaction.UserTransaction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -68,8 +71,24 @@ public class User {
         this.userName = userName;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+       Set<Authority> authorities = new HashSet<>();
+
+        for (userRole userRole : this.userRoles) {
+            authorities.add(new Authority(userRole.getRole().getRoleName()));
+        }
+
+       return authorities;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
     }
 
     public void setPassword(String password) {
